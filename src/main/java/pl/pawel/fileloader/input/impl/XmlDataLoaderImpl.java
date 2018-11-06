@@ -18,7 +18,6 @@ public class XmlDataLoaderImpl extends DefaultHandler implements XmlDataLoader {
 
     private String tempValue;
     private Long id = 1L;
-    private Long contactId = 1L;
     private boolean insideContacts = false;
 
     private Customer customer;
@@ -32,7 +31,6 @@ public class XmlDataLoaderImpl extends DefaultHandler implements XmlDataLoader {
     }
 
     public List<Customer> returnCustomerList(String fileName) {
-        System.out.println("inside returnCustomerList()");
         loadXml(fileName);
         return this.customers;
     }
@@ -42,7 +40,7 @@ public class XmlDataLoaderImpl extends DefaultHandler implements XmlDataLoader {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         try {
             SAXParser parser = factory.newSAXParser();
-            parser.parse("dane-osoby.xml", this);
+            parser.parse(fileName, this);
 
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -55,7 +53,6 @@ public class XmlDataLoaderImpl extends DefaultHandler implements XmlDataLoader {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        System.out.println("inside startElement(): " + qName.toString());
         if (qName.equalsIgnoreCase("persons")) {
 
         }
@@ -73,49 +70,46 @@ public class XmlDataLoaderImpl extends DefaultHandler implements XmlDataLoader {
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        System.out.println("inside endElement(): " + qName.toString());
-        if (qName.equals("persons")) {
+        if (qName.equalsIgnoreCase("persons")) {
             return;
         }
-       if (qName.equals("person")) {
+       if (qName.equalsIgnoreCase("person")) {
            customers.add(customer);
        }
-       if (qName.equals("name")) {
+       if (qName.equalsIgnoreCase("name")) {
            customer.setName(tempValue);
        }
-       if (qName.equals("surname")) {
+       if (qName.equalsIgnoreCase("surname")) {
            customer.setSurname(tempValue);
        }
-       if (qName.equals("age")) {
+       if (qName.equalsIgnoreCase("age")) {
            customer.setAge(Integer.valueOf(tempValue));
        }
-       if (qName.equals("city")) {
+       if (qName.equalsIgnoreCase("city")) {
 
        }
-       if (qName.equals("contacts")) {
+       if (qName.equalsIgnoreCase("contacts")) {
            customer.setContacts(contacts);
            insideContacts = false;
        }
 
        if (insideContacts) {
            contact = new Contact();
-           contact.setId(contactId);
            contact.setIdCustomer(customer.getId());
 
-           if (qName.equals("phone")) {
+           if (qName.equalsIgnoreCase("phone")) {
                contact.setType(2);
                contact.setContact(tempValue);
-           } else if (qName.equals("email")) {
+           } else if (qName.equalsIgnoreCase("email")) {
                contact.setType(1);
                contact.setContact(tempValue);
-           } else if (qName.equals("jabber")) {
+           } else if (qName.equalsIgnoreCase("jabber")) {
                contact.setType(3);
                contact.setContact(tempValue);
            } else {
                contact.setType(0);
                contact.setContact(tempValue);
            }
-           contactId++;
            contacts.add(contact);
        }
     }
@@ -123,7 +117,6 @@ public class XmlDataLoaderImpl extends DefaultHandler implements XmlDataLoader {
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         tempValue = new String(ch, start, length);
-        System.out.println("inside characters() - tempValue: " + tempValue.toString());
     }
 
 }

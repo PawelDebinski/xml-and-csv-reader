@@ -34,8 +34,11 @@ public class CsvDataLoaderImpl implements CsvDataLoader {
 
                 for (int i = 4; i < data.length; i++) {
                     Long idCustomer = id;
-                    int type = 1;
                     String contactData = data[i];
+                    int type = 0;
+                    if (contactData.contains("@")) {
+                        type = 1;
+                    }
                     Contact contact = new Contact(contactId, idCustomer, type, contactData);
                     customer.getContacts().add(contact);
                     contactId++;

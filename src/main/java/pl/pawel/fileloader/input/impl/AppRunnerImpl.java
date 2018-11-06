@@ -15,26 +15,8 @@ import java.util.Properties;
 
 public class AppRunnerImpl implements AppRunner {
 
-    private String fileType;
-    private String fileName;
     CsvDataLoader csvDataLoader;
     XmlDataLoader xmlDataLoader;
-
-    public String getFileType() {
-        return fileType;
-    }
-
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
 
     public CsvDataLoader getCsvDataLoader() {
         return csvDataLoader;
@@ -52,21 +34,7 @@ public class AppRunnerImpl implements AppRunner {
         this.xmlDataLoader = xmlDataLoader;
     }
 
-    @Override
-    public void loadProperties() {
-        Properties properties = new Properties();
-        try (InputStream input = new FileInputStream("main.properties")) {
-            properties.load(input);
-            fileType = properties.getProperty("app.filetype");
-            fileName = properties.getProperty("app.filename");
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     @Override
     public List<Customer> parseData(String fileType, String fileName) {
