@@ -1,4 +1,4 @@
-package pl.pawel.fileloader.entities;
+package pl.pawel.fileloader.io.entities;
 
 import java.util.ArrayList;
 import java.util.List;

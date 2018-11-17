@@ -1,6 +1,6 @@
-package pl.pawel.fileloader.dao;
+package pl.pawel.fileloader.io.dao;
 
-import pl.pawel.fileloader.entities.Customer;
+import pl.pawel.fileloader.io.entities.Customer;
 
 import java.util.List;
 

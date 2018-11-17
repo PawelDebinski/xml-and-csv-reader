@@ -1,14 +1,14 @@
-package pl.pawel.fileloader.input.impl;
+package pl.pawel.fileloader.ui.impl;
 
-import pl.pawel.fileloader.entities.Contact;
-import pl.pawel.fileloader.entities.Customer;
-import pl.pawel.fileloader.input.CsvDataLoader;
+import pl.pawel.fileloader.io.entities.Contact;
+import pl.pawel.fileloader.io.entities.Customer;
+import pl.pawel.fileloader.ui.FileConventer;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CsvDataLoaderImpl implements CsvDataLoader {
+public class CsvConverter implements FileConventer {
 
     public static final String PRODUCT_SEPARATOR = ",";
 
@@ -16,7 +16,7 @@ public class CsvDataLoaderImpl implements CsvDataLoader {
     private Long contactId = 1L;
 
     @Override
-    public List<Customer> loadCsv(String fileName) {
+    public List<Customer> convertFile(String fileName) {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(fileName)))) {
             List<Customer> customers = new ArrayList<>();
             String line;

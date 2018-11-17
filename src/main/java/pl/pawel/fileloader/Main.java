@@ -1,33 +1,16 @@
 package pl.pawel.fileloader;
 
-import pl.pawel.fileloader.dao.MainDao;
-import pl.pawel.fileloader.dao.impl.MainDaoImpl;
-import pl.pawel.fileloader.entities.Customer;
-import pl.pawel.fileloader.input.AppRunner;
-import pl.pawel.fileloader.input.impl.PropertyLoader;
-import pl.pawel.fileloader.input.impl.AppRunnerImpl;
-
-import java.util.List;
+import pl.pawel.fileloader.io.dao.impl.MainDaoImpl;
+import pl.pawel.fileloader.run.AppRunner;
+import pl.pawel.fileloader.run.impl.AppRunnerImpl;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        PropertyLoader.loadProperties();
-        MainDao mainDao = new MainDaoImpl();
-        AppRunner appRunner = new AppRunnerImpl();
+        AppRunner appRunner = new AppRunnerImpl(new MainDaoImpl());
+        appRunner.runApp();
 
-
-        List<Customer> customers =
-                appRunner.parseData(PropertyLoader.getFileType(), PropertyLoader.getFileName());
-
-        mainDao.open();
-        for (Customer customer : customers) {
-            mainDao.saveCustomer(customer);
-        }
-        mainDao.close();
-
-        System.out.println("SUCCESS");
 
 
     }

@@ -1,11 +1,11 @@
-package pl.pawel.fileloader.input.impl;
+package pl.pawel.fileloader.ui.impl;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import pl.pawel.fileloader.entities.Contact;
-import pl.pawel.fileloader.entities.Customer;
-import pl.pawel.fileloader.input.XmlDataLoader;
+import pl.pawel.fileloader.io.entities.Contact;
+import pl.pawel.fileloader.io.entities.Customer;
+import pl.pawel.fileloader.ui.FileConventer;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -14,10 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XmlDataLoaderImpl extends DefaultHandler implements XmlDataLoader {
+public class XmlConverter extends DefaultHandler implements FileConventer {
 
     private String tempValue;
-    private Long id = 1L;
     private boolean insideContacts = false;
 
     private Customer customer;
@@ -26,17 +25,16 @@ public class XmlDataLoaderImpl extends DefaultHandler implements XmlDataLoader {
     private List<Contact> contacts;
 
 
-    public XmlDataLoaderImpl() {
+    public XmlConverter() {
         customers = new ArrayList<>();
     }
 
-    public List<Customer> returnCustomerList(String fileName) {
+    public List<Customer> convertFile(String fileName) {
         loadXml(fileName);
         return this.customers;
     }
 
-    @Override
-    public void loadXml(String fileName) {
+    private void loadXml(String fileName) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         try {
             SAXParser parser = factory.newSAXParser();
@@ -58,9 +56,7 @@ public class XmlDataLoaderImpl extends DefaultHandler implements XmlDataLoader {
         }
         if (qName.equalsIgnoreCase("person")) {
             customer = new Customer();
-            customer.setId(id);
             contacts = new ArrayList<>();
-            id++;
         }
         if (qName.equalsIgnoreCase("contacts")) {
             insideContacts = true;
@@ -95,7 +91,6 @@ public class XmlDataLoaderImpl extends DefaultHandler implements XmlDataLoader {
 
        if (insideContacts) {
            contact = new Contact();
-           contact.setIdCustomer(customer.getId());
 
            if (qName.equalsIgnoreCase("phone")) {
                contact.setType(2);

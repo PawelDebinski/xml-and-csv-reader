@@ -1,9 +1,9 @@
-package pl.pawel.fileloader.dao.impl;
+package pl.pawel.fileloader.io.dao.impl;
 
-import pl.pawel.fileloader.dao.MainDao;
-import pl.pawel.fileloader.entities.Contact;
-import pl.pawel.fileloader.entities.Customer;
-import pl.pawel.fileloader.input.impl.PropertyLoader;
+import pl.pawel.fileloader.io.dao.MainDao;
+import pl.pawel.fileloader.io.entities.Contact;
+import pl.pawel.fileloader.io.entities.Customer;
+import pl.pawel.fileloader.config.PropertyLoader;
 
 import java.sql.*;
 import java.util.ArrayList;
