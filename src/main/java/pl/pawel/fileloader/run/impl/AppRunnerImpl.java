@@ -15,22 +15,20 @@ public class AppRunnerImpl implements AppRunner {
     private MainDao mainDao;
     private FileConventer fileConventer;
 
-    public AppRunnerImpl(MainDao mainDao) {
-        this.mainDao = mainDao;
+    public AppRunnerImpl() {
     }
 
     @Override
-    public void runApp() {
+    public void runApp(MainDao mainDao) {
+        this.mainDao = mainDao;
         String fileType = PropertyLoader.getFileType();
         String fileName = PropertyLoader.getFileName();
 
         List<Customer> customers = getCustomers(fileType, fileName);
 
-        mainDao.open();
         for (Customer customer : customers) {
             mainDao.saveCustomer(customer);
         }
-        mainDao.close();
 
         System.out.println("SUCCESS");
     }

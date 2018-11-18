@@ -4,5 +4,5 @@ import pl.pawel.fileloader.io.dao.MainDao;
 
 public interface AppRunner {
 
-    void runApp();
+    void runApp(MainDao mainDao);
 }

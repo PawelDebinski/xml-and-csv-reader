@@ -1,20 +1,32 @@
 package pl.pawel.fileloader.io.dao.impl;
 
+import org.postgresql.ds.PGSimpleDataSource;
 import pl.pawel.fileloader.io.dao.MainDao;
 import pl.pawel.fileloader.io.entities.Contact;
 import pl.pawel.fileloader.io.entities.Customer;
 import pl.pawel.fileloader.config.PropertyLoader;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainDaoImpl implements MainDao {
 
+    private static MainDaoImpl instance = null;
     private String url = PropertyLoader.getDriver();
     private String user = PropertyLoader.getDbUser();
     private String password = PropertyLoader.getDbPassword();
     private Connection conn;
+
+    private MainDaoImpl() {
+        open();
+    }
+
+    public static MainDaoImpl getInstance() {
+        if (instance == null) instance = new MainDaoImpl();
+        return instance;
+    }
 
     public void open() {
         try {
