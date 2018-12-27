@@ -15,20 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XmlConverter extends DefaultHandler implements FileConventer {
-
     private String tempValue;
     private boolean insideContacts = false;
-
     private Customer customer;
     private Contact contact;
     private List<Customer> customers;
     private List<Contact> contacts;
 
-
     public XmlConverter() {
         customers = new ArrayList<>();
     }
 
+    @Override
     public List<Customer> convertFile(String fileName) {
         loadXml(fileName);
         return this.customers;
@@ -39,7 +37,6 @@ public class XmlConverter extends DefaultHandler implements FileConventer {
         try {
             SAXParser parser = factory.newSAXParser();
             parser.parse(fileName, this);
-
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (SAXException e) {
@@ -51,9 +48,6 @@ public class XmlConverter extends DefaultHandler implements FileConventer {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        if (qName.equalsIgnoreCase("persons")) {
-
-        }
         if (qName.equalsIgnoreCase("person")) {
             customer = new Customer();
             contacts = new ArrayList<>();
@@ -61,7 +55,6 @@ public class XmlConverter extends DefaultHandler implements FileConventer {
         if (qName.equalsIgnoreCase("contacts")) {
             insideContacts = true;
         }
-
     }
 
     @Override
@@ -91,7 +84,6 @@ public class XmlConverter extends DefaultHandler implements FileConventer {
 
        if (insideContacts) {
            contact = new Contact();
-
            if (qName.equalsIgnoreCase("phone")) {
                contact.setType(2);
                contact.setContact(tempValue);
@@ -113,5 +105,4 @@ public class XmlConverter extends DefaultHandler implements FileConventer {
     public void characters(char[] ch, int start, int length) throws SAXException {
         tempValue = new String(ch, start, length);
     }
-
 }

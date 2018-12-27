@@ -1,19 +1,16 @@
 package pl.pawel.fileloader.io.dao.impl;
 
-import org.postgresql.ds.PGSimpleDataSource;
 import pl.pawel.fileloader.io.dao.MainDao;
 import pl.pawel.fileloader.io.entities.Contact;
 import pl.pawel.fileloader.io.entities.Customer;
 import pl.pawel.fileloader.config.PropertyLoader;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainDaoImpl implements MainDao {
-
-    private static MainDaoImpl instance = null;
+    private static MainDaoImpl instance = new MainDaoImpl();
     private String url = PropertyLoader.getDriver();
     private String user = PropertyLoader.getDbUser();
     private String password = PropertyLoader.getDbPassword();
@@ -21,10 +18,11 @@ public class MainDaoImpl implements MainDao {
 
     private MainDaoImpl() {
         open();
+        createCustomersTable();
+        createContactsTable();
     }
 
     public static MainDaoImpl getInstance() {
-        if (instance == null) instance = new MainDaoImpl();
         return instance;
     }
 
@@ -36,19 +34,20 @@ public class MainDaoImpl implements MainDao {
         }
     }
 
+    @Override
     public void close() {
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public List<Customer> getAllCustomers() {
-
         try (Statement statement = conn.createStatement()) {
-            ResultSet results = statement.executeQuery("SELECT * FROM CUSTOMERS");
-
+            ResultSet results = statement.executeQuery("select * from customers");
             List<Customer> customers = new ArrayList<>();
             while (results.next()) {
                 Customer customer = new Customer();
@@ -59,24 +58,19 @@ public class MainDaoImpl implements MainDao {
                 customers.add(customer);
             }
             return customers;
-
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
-
     }
 
     @Override
     public void saveCustomer(Customer customer) {
-        createCustomersTable();
-        createContactsTable();
-
         String query = "insert into customers(name, surname, age) values(?, ?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
             statement.setString(1, customer.getName());
             statement.setString(2, customer.getSurname());
-            if (customer.getAge() !=null) {
+            if (customer.getAge() != null) {
                 statement.setInt(3, customer.getAge());
             } else {
                 statement.setObject(3, null);
@@ -87,14 +81,11 @@ public class MainDaoImpl implements MainDao {
             if (results.next()) {
                 generatedId = results.getInt(1);
             }
-
             statement.close();
             saveContacts(customer.getContacts(), generatedId);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     private void saveContacts(List<Contact> contacts, int customerId) {
@@ -106,21 +97,18 @@ public class MainDaoImpl implements MainDao {
                 statement.setString(3, contact.getContact());
                 statement.execute();
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     private void createCustomersTable() {
-        String sqlCreateTable = "CREATE TABLE IF NOT EXISTS customers" +
-                "(id SERIAL PRIMARY KEY," +
-                " name VARCHAR(50)," +
-                " surname VARCHAR(50)," +
-                " age INTEGER)";
-
-        try {
-            PreparedStatement statement = conn.prepareStatement(sqlCreateTable);
+        String query = "create table if not exists customers" +
+                "(id serial primary key," +
+                " name varchar(50)," +
+                " surname varchar(50)," +
+                " age integer)";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -128,18 +116,15 @@ public class MainDaoImpl implements MainDao {
     }
 
     private void createContactsTable() {
-        String sqlCreateTable = "CREATE TABLE IF NOT EXISTS contacts" +
-                "(id SERIAL PRIMARY KEY," +
-                " id_customer INTEGER," +
-                " type INTEGER," +
-                " contact VARCHAR(50))";
-
-        try {
-            PreparedStatement statement = conn.prepareStatement(sqlCreateTable);
+        String query = "create table if not exists contacts" +
+                "(id serial primary key," +
+                " id_customer integer," +
+                " type integer," +
+                " contact varchar(50))";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 }

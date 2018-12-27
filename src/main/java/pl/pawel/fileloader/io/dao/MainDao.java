@@ -10,5 +10,4 @@ public interface MainDao {
     void close();
     List<Customer> getAllCustomers();
     void saveCustomer(Customer customer);
-
 }

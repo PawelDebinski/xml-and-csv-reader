@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
-
     private Long id;
     private String name;
     private String surname;
@@ -14,8 +13,7 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(Long id, String name, String surname, Integer age) {
-        this.id = id;
+    public Customer(String name, String surname, Integer age) {
         this.name = name;
         this.surname = surname;
         this.age = age;

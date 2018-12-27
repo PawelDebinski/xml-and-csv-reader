@@ -1,7 +1,5 @@
 package pl.pawel.fileloader.config;
 
-import pl.pawel.fileloader.ui.FileConventer;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,9 +7,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertyLoader {
-
-    public static final String CONFIG_FILE = "main.properties";
-
+    private static final String CONFIG_FILE = "main.properties";
     public static final String FILE_TYPE;
     public static final String FILE_NAME;
     public static final String DRIVER;
@@ -27,7 +23,6 @@ public class PropertyLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         FILE_TYPE = properties.getProperty("app.filetype");
         FILE_NAME = properties.getProperty("app.filename");
         DRIVER = properties.getProperty("app.driver");
@@ -36,7 +31,6 @@ public class PropertyLoader {
     }
 
     private PropertyLoader() {
-
     }
 
     public static String getFileType() {

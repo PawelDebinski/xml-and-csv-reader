@@ -1,7 +1,6 @@
 package pl.pawel.fileloader.io.entities;
 
 public class Contact {
-
     private Long id;
     private Long idCustomer;
     private int type;
@@ -10,9 +9,7 @@ public class Contact {
     public Contact() {
     }
 
-    public Contact(Long id, Long idCustomer, int type, String contact) {
-        this.id = id;
-        this.idCustomer = idCustomer;
+    public Contact(int type, String contact) {
         this.type = type;
         this.contact = contact;
     }
